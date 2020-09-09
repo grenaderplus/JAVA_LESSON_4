@@ -4,8 +4,8 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class LESSON_4_HOMEWORK {
-    static final int SIZE = 3;
-//  static final int DOTS_TO_WIN = 3;
+    static final int SIZE = 5;
+    static final int DOTS_TO_WIN = 3;
 
     static final char DOT_X = 'X';
     static final char DOT_O = 'O';
@@ -24,7 +24,7 @@ public class LESSON_4_HOMEWORK {
         while (true) {
             humanTurn();
             printMap();
-            if (checkWin(DOT_X)) {
+            if (isLineWIn(DOT_X, DOTS_TO_WIN)) {
                 System.out.println("Ты победил!");
                 break;
             }
@@ -34,7 +34,7 @@ public class LESSON_4_HOMEWORK {
             }
             aiTurn();
             printMap();
-            if (checkWin(DOT_O)) {
+            if (isLineWIn(DOT_O, DOTS_TO_WIN)) {
                 System.out.println("Ты проиграл!");
                 break;
             }
@@ -117,31 +117,69 @@ public class LESSON_4_HOMEWORK {
         return true;
     }
 
-    public static boolean checkWin(char c) {
-        if (map[0][0] == c && map[0][1] == c && map[0][2] == c) {
-            return true;
+//    public static boolean checkWin(char c) {
+//        for (int i = 0; i < SIZE; i++) {
+//            for (int j = 0; j < SIZE; j++) {
+//                if (map[i][j] == c) {
+//                    continue;
+//                }
+//
+//            }
+//        }
+//        if (map[0][0] == c && map[0][1] == c && map[0][2] == c) {
+//            return true;
+//        }
+//        if (map[1][0] == c && map[1][1] == c && map[1][2] == c) {
+//            return true;
+//        }
+//        if (map[2][0] == c && map[2][1] == c && map[2][2] == c) {
+//            return true;
+//        }
+//        if (map[0][0] == c && map[1][0] == c && map[2][0] == c) {
+//            return true;
+//        }
+//        if (map[0][1] == c && map[1][1] == c && map[2][1] == c) {
+//            return true;
+//        }
+//        if (map[0][2] == c && map[1][2] == c && map[2][2] == c) {
+//            return true;
+//        }
+//        if (map[0][0] == c && map[1][1] == c && map[2][2] == c) {
+//            return true;
+//        }
+//        if (map[0][2] == c && map[1][1] == c && map[2][0] == c) {
+//            return true;
+//        }
+//        return false;
+//    }
+
+    public static boolean isLineValid(int y, int x, int cy, int cx, char dot, int dotsToWin) {
+        if (y + cy * (dotsToWin - 1) > SIZE - 1 || x + cx * (dotsToWin - 1) > SIZE - 1 || y + cy * (dotsToWin - 1) < 0) {
+            return false;
         }
-        if (map[1][0] == c && map[1][1] == c && map[1][2] == c) {
-            return true;
+        for (int i = 0; i < dotsToWin; i++) {
+            if (map[y + i * cy][x + i * cx] != dot) {
+                return false;
+            }
         }
-        if (map[2][0] == c && map[2][1] == c && map[2][2] == c) {
-            return true;
-        }
-        if (map[0][0] == c && map[1][0] == c && map[2][0] == c) {
-            return true;
-        }
-        if (map[0][1] == c && map[1][1] == c && map[2][1] == c) {
-            return true;
-        }
-        if (map[0][2] == c && map[1][2] == c && map[2][2] == c) {
-            return true;
-        }
-        if (map[0][0] == c && map[1][1] == c && map[2][2] == c) {
-            return true;
-        }
-        if (map[0][2] == c && map[1][1] == c && map[2][0] == c) {
-            return true;
+        return true;
+    }
+
+    public static boolean isLineWIn(char dot, int dotsToWin) {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                if (
+                        isLineValid(i, j, 0, 1, dot, dotsToWin) ||
+                                isLineValid(i, j, 1, 0, dot, dotsToWin) ||
+                                isLineValid(i, j, 1, 1, dot, dotsToWin) ||
+                                isLineValid(i, j, -1, 1, dot, dotsToWin)
+                ) {
+                    return true;
+                }
+            }
         }
         return false;
     }
+
+
 }
